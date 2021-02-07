@@ -6,13 +6,12 @@ on:
 jobs:
   build-prod:
     runs-on: ubuntu-latest
-    if: github.event_name == 'push' && github.ref == 'refs/heads/master'
     steps:
       - uses: actions/checkout@master
       - name: Publish Production to Registry
         uses: elgohr/Publish-Docker-Github-Action@master
         with:
-          name: paradewisudaitb/Line-Bot/wispril21-line-bot
+          name: paradewisudaitb/line-bot/wispril21-line-bot
           username: ${{ secrets.PACKAGE_USERNAME }}
           password: ${{ secrets.PACKAGE_PASSWORD }}
           registry: docker.pkg.github.com
