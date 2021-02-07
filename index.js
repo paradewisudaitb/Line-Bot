@@ -38,6 +38,6 @@ app.post("/githubCallback", (req, res) => {
   })
 });
 
-app.listen(PORT, () => {
+app.listen('0.0.0.0', PORT, () => {
   console.log(`Listening in ${PORT}`);
 });
