@@ -17,6 +17,7 @@ app.get("/", (req, res) => {
   res.send("GAK ADA APA2");
 });
 app.post("/githubCallback", (req, res) => {
+  console.log(new Date());
   if (req.body.commits.length > 0) {
     let messageText = `${req.body.pusher.name} -> ${req.body.repository.name} \n`;
     let modified = new Set();
