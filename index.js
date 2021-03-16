@@ -1,5 +1,4 @@
 const express = require("express");
-const bodyParser = require("body-parser");
 const line = require("@line/bot-sdk");
 const app = express();
 
@@ -9,15 +8,12 @@ const config = {
 };
 const send_to = process.env.RECEIVER_ID;
 const client = new line.Client(config);
-app.use(bodyParser.json());
-
+app.use(express.json());
 const PORT = process.env.PORT || 5000;
-
 app.get("/", (req, res) => {
   res.send("GAK ADA APA2");
 });
 app.post("/githubCallback", (req, res) => {
-  console.log(new Date());
   if (req.body.commits.length > 0) {
     let messageText = `${req.body.pusher.name} -> ${req.body.repository.name} \n`;
     let modified = new Set();
@@ -31,17 +27,18 @@ app.post("/githubCallback", (req, res) => {
       removed.add(currentCommit.removed);
       modified.add(currentCommit.modified);
     }
+    console.log(added);
     if (added.size > 0 || modified.size > 0 || removed.size > 0) {
       messageText += "\n";
       if (added.size > 0) {
         messageText += "Added: ";
         let isFirst = true;
         added.forEach((x) => {
-          isFirst = false;
           if (!isFirst) {
             messageText += ", ";
           }
           messageText += x;
+          isFirst = false;
         });
         messageText += "\n";
       }
@@ -50,11 +47,11 @@ app.post("/githubCallback", (req, res) => {
       messageText += "Modified: ";
       let isFirst = true;
       modified.forEach((x) => {
-        isFirst = false;
         if (!isFirst) {
           messageText += ", ";
         }
         messageText += x;
+        isFirst = false;
       });
       messageText += "\n";
     }
@@ -62,11 +59,11 @@ app.post("/githubCallback", (req, res) => {
       messageText += "Removed: ";
       let isFirst = true;
       removed.forEach((x) => {
-        isFirst = false;
         if (!isFirst) {
           messageText += ", ";
         }
         messageText += x;
+        isFirst = false;
       });
       messageText += "\n";
     }
@@ -80,7 +77,6 @@ app.post("/githubCallback", (req, res) => {
         res.send("Ok");
       })
       .catch((err) => {
-        console.log(err);
         res.status(400).send("error");
       });
   }
